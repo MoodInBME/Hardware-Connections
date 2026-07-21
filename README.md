@@ -35,7 +35,7 @@ Hardware-Connections/
 │   └── print-settings.md            # material, infill, layer height
 ├── camera-module/
 │   ├── imx477-pi5-config.md          # setup rpicam/Picamera2 di Pi 5
-│   ├── imx477-jetson-config.md       # RENCANA: nvarguscamerasrc/Argus di Jetson
+│   ├── imx477-jetson-config.md       # Jetson: nvarguscamerasrc/Argus (pengisian berjalan)
 │   ├── lens-m12-selection.md         # pemilihan lensa M12 (FoV 45/55/65/70/90°)
 │   ├── mirror-attenuation-tests.md  # log uji Persamaan 7 (atenuasi two-way mirror)
 │   └── fov-calculation.md           # acuan Persamaan 9 (jarak kerja & FoV)
@@ -56,8 +56,8 @@ Hardware-Connections/
 
 ## Target Perangkat
 
-- Compute (saat ini): Raspberry Pi 5 (16 GB). Bila desain 3D (Gambar 3 proposal) memakai Compute Module 5, samakan penamaan di `pinout-raspberrypi5.md` dan proposal agar tidak ada inkonsistensi Pi 5 vs CM5.
-- Compute (rencana): Jetson Orin Nano Super — untuk inferensi ST-GCN + STC-rPPG yang lebih berat. Lihat bagian Rencana Migrasi ke Jetson di bawah.
+- Compute (utama): **Jetson Orin Nano Super** — board edge terpilih untuk inferensi ST-GCN + STC-rPPG. Unit **sudah di tangan** dan sedang disiapkan: **JetPack 6.2.1** (L4T 36.4.4, Ubuntu 22.04, CUDA 12.6) dengan **boot dari NVMe SSD**. Lihat bagian Integrasi Jetson Orin Nano Super di bawah.
+- Compute (alternatif/awal): Raspberry Pi 5 (16 GB). Bila desain 3D (Gambar 3 proposal) memakai Compute Module 5, samakan penamaan di `pinout-raspberrypi5.md` dan proposal agar tidak ada inkonsistensi Pi 5 vs CM5.
 - Kamera: **Arducam IMX477 (RGB, 12.3 MP)** dengan dudukan lensa **M12**; tersedia 5 opsi lensa FoV — **45°, 55°, 65°, 70°, 90°** (pilih sesuai jarak kerja cermin; lihat `camera-module/lens-m12-selection.md`).
 - Display: Waveshare 10.1" IPS 1024×600 HDMI.
 - Komunikasi: MQTT over TLS (port 8883).
@@ -72,20 +72,20 @@ Hardware-Connections/
 
 `network/mqtt-topic-schema.md` **tidak** mendefinisikan ulang skema — ia mereferensikan kontrak kanonik di `MoodIn-master/docs/ipc-contract.md` dan hanya menambahkan detail transport (broker, TLS, QoS, retensi). Ini mencegah dua sumber kebenaran yang bisa saling menyimpang saat integrasi.
 
-## Rencana Migrasi ke Jetson Orin Nano Super
+## Integrasi Jetson Orin Nano Super
 
-Status: **rencana** (unit ada di dosen, belum diambil). Pi 5 tetap platform pengembangan saat ini; Jetson ditargetkan untuk inferensi lebih berat (ST-GCN + STC-rPPG paralel, target real-time ≥ 30 fps).
+Status: **aktif** — unit **sudah di tangan** dan sedang disiapkan (JetPack 6.2.1, boot dari NVMe SSD KIOXIA 256 GB). Jetson menjadi board utama untuk inferensi (ST-GCN + STC-rPPG paralel, target real-time ≥ 30 fps); Raspberry Pi 5 dipertahankan sebagai alternatif/awal.
 
 Perbedaan integrasi yang perlu disiapkan:
 
-- **Kamera**: port kamera Jetson Orin Nano Super = 2× MIPI CSI-2 **22-pin**, sedangkan board IMX477 = **15-pin** → butuh kabel/adapter **15→22 pin**. Driver IMX477 didukung native di **JetPack 6.2**.
+- **Kamera**: port kamera Jetson Orin Nano Super = 2× MIPI CSI-2 **22-pin**, sedangkan board IMX477 = **15-pin** → butuh kabel/adapter **15→22 pin**. IMX477 didukung di **JetPack 6.2.1**: aktifkan overlay lewat `jetson-io.py` (driver native), atau pasang driver Arducam (`install_full.sh -m imx477`) bila mode HQ penuh diperlukan.
 - **Software kamera**: **tidak ada `rpicam`/`libcamera` khas Pi**. Gunakan **`nvarguscamerasrc`** (GStreamer) atau **libargus**; cek mode sensor dengan `v4l2-ctl --list-formats-ext`. Skrip capture Picamera2 dari Pi perlu diporting ke pipeline GStreamer.
 - **Display**: Jetson mengeluarkan **DisplayPort**, panel Waveshare 10.1" masuk lewat HDMI → butuh adapter aktif **DP→HDMI**.
-- **Penyimpanan**: slot **M.2 Key-M (PCIe Gen3)** untuk SSD NVMe (dataset & checkpoint).
+- **Penyimpanan**: slot **M.2 Key-M** untuk SSD NVMe (OS + dataset & checkpoint). Terpasang: **KIOXIA BG6 256 GB**; OS 6.2.1 di-boot langsung dari NVMe.
 - **Daya**: mode 7–25 W (lebih tinggi dari Pi 5) → tinjau ulang `power/power-budget-calc.md` dan rating PSU.
 - **Runtime DL**: manfaatkan **TensorRT (INT8)**; simpan langkah konversi ONNX→TensorRT di dokumen model terkait.
 
-Rincian langkah-demi-langkah akan diisi di `camera-module/imx477-jetson-config.md` setelah unit tersedia.
+Rincian langkah-demi-langkah sedang diisi di `camera-module/imx477-jetson-config.md` (unit sudah tersedia).
 
 ## Quick Start (perakitan)
 
