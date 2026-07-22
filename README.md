@@ -9,7 +9,7 @@ Bagian dari proyek [MoodIn](https://github.com/MoodInBME/MoodIn-master.git).
 ## Isi
 
 - `schematics/` — wiring & pinout
-- `enclosure/` — desain 3D casing
+- `enclosure/` — desain 3D casing (sumber CAD di `cad/`, mesh siap-cetak di `stl/`)
 - `camera-module/` — konfigurasi kamera & hasil uji sinyal
 - `display/` — setup panel Waveshare 10.1"
 - `network/` — MQTT, TLS, WiFi
@@ -26,13 +26,16 @@ Hardware-Connections/
 │   ├── pinout-raspberrypi5.md
 │   └── power-distribution.md
 ├── enclosure/
-│   ├── cad/
-│   │   ├── mirror-frame.step
-│   │   ├── bottom-case.step
-│   │   └── full-assembly.f3d
+│   ├── cad/                          # sumber CAD editable (Fusion 360)
+│   │   ├── full-assembly.f3d
+│   │   └── *.step                    # ekspor STEP (interchange)
+│   ├── stl/                          # mesh siap-cetak (impor ke Bambu Studio)
+│   │   ├── Top_Frame.stl             # ~ mirror-frame
+│   │   ├── base_enclosure1.stl       # ~ bottom-case (bagian 1)
+│   │   └── base_enclosure2.stl       # ~ bottom-case (bagian 2)
 │   ├── renders/
 │   │   └── exploded-view.png
-│   └── print-settings.md            # material, infill, layer height
+│   └── print-settings.md            # material, infill, layer height, alur Bambu Studio
 ├── camera-module/
 │   ├── imx477-pi5-config.md          # setup rpicam/Picamera2 di Pi 5
 │   ├── imx477-jetson-config.md       # Jetson: nvarguscamerasrc/Argus (pengisian berjalan)
@@ -67,6 +70,10 @@ Hardware-Connections/
 - **Atenuasi mirror + kebutuhan RGB (uji di `camera-module/`)**: two-way mirror menurunkan cahaya yang sampai ke sensor. IMX477 dipilih justru karena **sensor RGB** (bukan NoIR) — rPPG membutuhkan kanal warna utuh dan model umumnya dilatih pada citra RGB, sehingga NoIR akan merusak sinyal & domain input. Konsekuensinya, kompensasi cahaya harus di sisi **pencahayaan/eksposur** (tambah iluminasi, kunci AE/AWB, exposure kelipatan 10 ms untuk anti-flicker 50 Hz), bukan beralih ke NoIR. Dokumentasikan hasil `mirror-attenuation-tests.md` sebagai data kalibrasi, bukan sekadar lampiran.
 - **FoV vs jarak kerja (`fov-calculation.md`)**: karena IMX477 memakai mount M12 dengan lensa yang bisa diganti, FoV kini **variabel desain**, bukan tetap. Angka spec lensa (45/55/65/70/90°) diperlakukan sebagai **FoV diagonal**; setelah dikonversi ke FoV vertikal pada sensor 1/2.3", cakupan tinggi pada jarak kerja **45 cm** kira-kira: 55° ≈ 28 cm, 65° ≈ 34 cm, 70° ≈ 38 cm, 90° ≈ 54 cm. **Rekomendasi: lensa 65° (diagonal) pada jarak kerja ~45 cm** — memuat kepala + margin tinggi antar-pengguna, distorsi moderat (penting untuk geometri landmark ST-GCN), dan tidak menangkap terlalu banyak latar (privasi). Perhitungan & pemilihan lengkap: `camera-module/fov-calculation.md` (kanonik) dan `camera-module/lens-m12-selection.md`. Trade-off: makin lebar FoV → wajah makin sedikit piksel + distorsi makin besar.
 - **Anggaran daya (`power/`)**: bedakan rating PSU (mis. 5V/5A) dari konsumsi aktual. Kolom `measured-current-log.csv` adalah pembuktian; jangan mengklaim konsumsi memakai angka rating catu daya.
+
+## Enclosure & Pencetakan 3D
+
+Desain enclosure dibuat di **Fusion 360** dan dicetak dengan **Bambu Lab P1S** via **Bambu Studio**. Berkas mesh siap-cetak (STL) dari tim — `Top_Frame.stl`, `base_enclosure1.stl`, `base_enclosure2.stl` — diletakkan di `enclosure/stl/`; sumber CAD editable (`.f3d`/`.step`) di `enclosure/cad/`. Alur konversi (ekspor STL → slice di Bambu Studio → 3MF/G-code) dan parameter cetak (material PETG, layer 0,20 mm, infill 20–25% gyroid) didokumentasikan di `enclosure/print-settings.md`. Nama berkas aktual berbeda dari placeholder lama (`mirror-frame`/`bottom-case`); pemetaannya dicatat di `print-settings.md`.
 
 ## Kontrak MQTT
 

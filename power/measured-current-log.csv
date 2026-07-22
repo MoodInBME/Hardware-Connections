@@ -1,0 +1,9 @@
+tanggal,kondisi,rail,tegangan_V,arus_mA,daya_W,estimasi_W,selisih_persen,alat_ukur,catatan
+# Isi baris di bawah dengan hasil ukur aktual (USB power meter / multimeter inline). Baris '#' adalah komentar/contoh.
+# kondisi: idle | boot | inferensi | display_on | led_on | puncak
+# selisih_persen = (daya_W - estimasi_W) / estimasi_W * 100
+2026-07-__,idle,pi5_5v1,5.10,,, ,,USB-C power meter,contoh - hapus saat mengisi
+2026-07-__,inferensi,pi5_5v1,5.10,,,7.0,,USB-C power meter,
+2026-07-__,display_on,panel_5v,5.00,,,3.5,,inline multimeter,
+2026-07-__,led_on,led_5v,5.00,,,3.0,,inline multimeter,
+2026-07-__,puncak,total,,,, ,,,jumlahkan semua rail saat beban puncak
