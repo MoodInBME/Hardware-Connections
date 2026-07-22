@@ -56,8 +56,8 @@ Hardware-Connections/
 
 ## Target Perangkat
 
-- Compute (utama): **Jetson Orin Nano Super** — board edge terpilih untuk inferensi ST-GCN + STC-rPPG. Unit **sudah di tangan** dan sedang disiapkan: **JetPack 6.2.1** (L4T 36.4.4, Ubuntu 22.04, CUDA 12.6) dengan **boot dari NVMe SSD**. Lihat bagian Integrasi Jetson Orin Nano Super di bawah.
-- Compute (alternatif/awal): Raspberry Pi 5 (16 GB). Bila desain 3D (Gambar 3 proposal) memakai Compute Module 5, samakan penamaan di `pinout-raspberrypi5.md` dan proposal agar tidak ada inkonsistensi Pi 5 vs CM5.
+- Compute (utama): **Raspberry Pi 5** (16 GB) — board edge yang dipakai untuk CE2 (kamera IMX477 native, plug-and-play). Bila desain 3D (Gambar 3 proposal) memakai Compute Module 5, samakan penamaan di `pinout-raspberrypi5.md` dan proposal agar tidak ada inkonsistensi Pi 5 vs CM5.
+- Compute (rencana peningkatan): **Jetson Orin Nano Super** — unit **sudah di tangan**; migrasi (JetPack 6.2.1, L4T 36.4.4, Ubuntu 22.04, CUDA 12.6, **boot dari NVMe SSD**) direncanakan setelah pendampingan teknis tersedia. Lihat bagian Integrasi Jetson Orin Nano Super di bawah.
 - Kamera: **Arducam IMX477 (RGB, 12.3 MP)** dengan dudukan lensa **M12**; tersedia 5 opsi lensa FoV — **45°, 55°, 65°, 70°, 90°** (pilih sesuai jarak kerja cermin; lihat `camera-module/lens-m12-selection.md`).
 - Display: Waveshare 10.1" IPS 1024×600 HDMI.
 - Komunikasi: MQTT over TLS (port 8883).
@@ -74,7 +74,7 @@ Hardware-Connections/
 
 ## Integrasi Jetson Orin Nano Super
 
-Status: **aktif** — unit **sudah di tangan** dan sedang disiapkan (JetPack 6.2.1, boot dari NVMe SSD KIOXIA 256 GB). Jetson menjadi board utama untuk inferensi (ST-GCN + STC-rPPG paralel, target real-time ≥ 30 fps); Raspberry Pi 5 dipertahankan sebagai alternatif/awal.
+Status: **rencana peningkatan** — unit **sudah di tangan** (JetPack 6.2.1, boot dari NVMe SSD KIOXIA 256 GB); migrasi dari Raspberry Pi 5 direncanakan setelah pendampingan teknis tersedia. Untuk CE2, **Raspberry Pi 5** tetap board utama; Jetson disiapkan sebagai peningkatan inferensi (ST-GCN + STC-rPPG paralel, target real-time ≥ 30 fps).
 
 Perbedaan integrasi yang perlu disiapkan:
 
