@@ -1,17 +1,17 @@
 # Provisioning WiFi — MoodIn Edge
 
-> Cara perangkat cermin terhubung ke jaringan (untuk sinkronisasi cloud/broker & update). Fokus Raspberry Pi 5; catatan Jetson di akhir.
+> Cara perangkat cermin terhubung ke jaringan (untuk sinkronisasi cloud/broker & update). Fokus Jetson Orin Nano Super; catatan Jetson di akhir.
 
 ## 1. Opsi Provisioning
 
 | Metode | Kapan dipakai | Catatan |
 | --- | --- | --- |
-| Pra-konfigurasi via Raspberry Pi Imager | saat flashing OS | paling mudah untuk 1 jaringan tetap |
+| Pra-konfigurasi via Jetson Orin Nano Super Imager | saat flashing OS | paling mudah untuk 1 jaringan tetap |
 | NetworkManager (`nmcli`) | ganti/ tambah jaringan di lapangan | Pi OS Trixie memakai NetworkManager |
 | Headless `firstrun`/`wpa_supplicant` | tanpa monitor | untuk deployment massal |
 | Portal captive (softAP) | pengguna akhir memilih WiFi sendiri | perlu tooling tambahan (mis. Comitup) |
 
-## 2. Raspberry Pi Imager (saat flashing)
+## 2. Jetson Orin Nano Super Imager (saat flashing)
 
 Saat menulis OS, buka **advanced options**: set SSID + password, negara WiFi (**ID**), hostname, aktifkan SSH. Cocok untuk jaringan tim yang tetap.
 
@@ -45,7 +45,7 @@ network={
 
 - **Band**: utamakan 2,4 GHz untuk jangkauan; 5 GHz bila broker/streaming butuh bandwidth & sinyal kuat.
 - **Jaringan kampus (WPA2-Enterprise/captive portal)**: butuh konfigurasi EAP (identity + password/sertifikat); captive portal bisa menghambat perangkat headless — siapkan MAC registration bila perlu.
-- **Fallback**: pertimbangkan Ethernet (Pi 5 punya GbE) untuk demo yang butuh kestabilan.
+- **Fallback**: pertimbangkan Ethernet (Jetson Orin Nano Super punya GbE) untuk demo yang butuh kestabilan.
 - **Keamanan**: jangan commit kredensial WiFi ke repo. Simpan sebagai secret/di luar VCS.
 
 ## 6. Verifikasi
@@ -58,7 +58,7 @@ ip addr show wlan0             # IP diperoleh?
 
 ## 7. Catatan Jetson (rencana)
 
-Jetson (Ubuntu 22.04) juga memakai NetworkManager (`nmcli`) — langkah bagian 3 berlaku. Devkit umumnya butuh modul WiFi M.2 (bila belum terpasang) atau adapter USB WiFi.
+Jetson (Ubuntu 24.04) juga memakai NetworkManager (`nmcli`) — langkah bagian 3 berlaku. Devkit umumnya butuh modul WiFi M.2 (bila belum terpasang) atau adapter USB WiFi.
 
 ## 8. TODO
 

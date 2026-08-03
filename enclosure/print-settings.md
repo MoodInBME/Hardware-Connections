@@ -46,8 +46,8 @@ Disetel untuk keseimbangan kekuatan, dimensi presisi (dudukan kamera & panel), d
 ## 4. Pertimbangan Desain-untuk-Cetak (DfM)
 
 - **Toleransi rakit**: beri clearance ~0,2–0,3 mm pada lubang kamera, slot panel, dan sambungan `base_enclosure1`<->`base_enclosure2`.
-- **Ventilasi**: sisakan celah/lubang angin untuk panas Pi 5 + LED (hindari heat-soak sensor yang menaikkan noise rPPG).
-- **Dudukan kamera**: pastikan sudut & jarak sesuai jarak kerja nominal ~45 cm dan lensa 65° (lihat `camera-module/lens-m12-selection.md`).
+- **Ventilasi**: sisakan celah/lubang angin untuk panas Jetson Orin Nano Super + LED (hindari heat-soak sensor yang menaikkan noise rPPG).
+- **Dudukan kamera**: pastikan sudut & jarak sesuai jarak kerja nominal ~45 cm dan lensa 55° (lihat `camera-module/lens-m12-selection.md`).
 - **Manajemen kabel**: kanal untuk CSI, HDMI, USB, dan daya agar tidak menekan konektor.
 
 ## 5. Log Cetak (isi saat mencetak)

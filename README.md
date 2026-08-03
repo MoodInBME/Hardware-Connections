@@ -1,99 +1,87 @@
 # Hardware-Connections
 
-Root konfigurasi hardware, protokol fisik, dan komunikasi untuk MoodIn.
+Perangkat keras MoodIn: pengkabelan, kamera CSI, termal, daya, dan casing. Repo ini tidak memuat model dan tidak memuat kode UI.
 Bagian dari proyek [MoodIn](https://github.com/MoodInBME/MoodIn-master.git).
 
 ![Repo](https://img.shields.io/badge/github-repo-blue?logo=github)
 ![Layer](https://img.shields.io/badge/layer-hardware-lightgrey)
 
-## Isi
+---
 
-- `schematics/` — wiring & pinout
-- `enclosure/` — desain 3D casing (sumber CAD di `cad/`, mesh siap-cetak di `stl/`)
-- `camera-module/` — konfigurasi kamera & hasil uji sinyal
-- `display/` — setup panel Waveshare 10.1"
-- `network/` — MQTT, TLS, WiFi
-- `power/` — perhitungan & pengukuran daya
-- `bom/` — bill of materials
+## 1. Bill of material
 
-## Struktur Repository Ini
+| Komponen | Spesifikasi | Catatan Penting |
+|---|---|---|
+| Compute | **NVIDIA Jetson Orin Nano Super 8GB** (Ubuntu 24.04, JetPack 7.2) | 67 TOPS INT8. Menggantikan Raspberry Pi 5 yang tidak sanggup menjalankan dua model neural simultan pada 30 fps. |
+| Kamera | Arducam **IMX477** RGB 12,3 MP + lensa M12 55° | RGB, bukan NoIR. Cabang fisiologis (rPPG) sangat bergantung pada kanal hijau yang bersih. |
+| Layar | Waveshare 10,1 inci 1024x600 HDMI IPS | Mode *landscape*. Gunakan adapter DP→HDMI aktif untuk Jetson. |
+| Optik | Figura + kaca + film stiker satu arah | Ada masalah transmisi cahaya. Lihat Bagian 4. |
+| Daya | 19 V, tipikal ~43 W, puncak ~52 W | Catu daya disesuaikan dengan spek Jetson. |
+| Pendinginan | Kipas 60 mm, 15-20 CFM | Target suhu *junction* < 80°C. |
 
-```text
+## 2. Geometri Optik (Field of View)
+
+Pada jarak kerja 55 cm dengan lensa M12 55° diagonal:
+```
+tan(27,5°) = 0,5206
+HFoV = 2 * arctan(0,5206 * 0,8) = 45,2°
+VFoV = 2 * arctan(0,5206 * 0,6) = 34,7°
+```
+> **Koreksi Proposal**: HFoV yang benar adalah **45,2°**, bukan 42,2°.
+
+## 3. Termal
+
+Laju aliran udara minimum:
+```
+CFM = 1,76 * P / dT
+```
+Pada beban puncak (52 W) dengan delta temperatur 8°C, dibutuhkan sekitar 11,4 CFM. Kipas 15-20 CFM memberikan margin yang cukup, **dengan syarat** casing memiliki jalur udara masuk dan keluar (ventilasi memadai).
+
+## 4. Peringatan: Transmisi Stiker Cermin Satu Arah
+
+Desain fisik memakai bingkai figura berlapis film cermin (stiker rubben). Film ini hanya mentransmisikan **10-20% cahaya** dan *tidak rata secara spektral* (atenuasi berbeda untuk R, G, B).
+
+Kehilangan SNR ~5 dB pada wajah (ROI) sangat fatal bagi modul STC-rPPG. Selain itu, distorsi rasio antar-kanal warna tidak bisa dikalibrasi.
+**Mitigasi:** Buat potongan lubang kecil berdiameter **12 mm** pada film stiker, tepat di depan lensa kamera, dan sembunyikan di balik pinggiran bingkai figura.
+
+## 5. Bring-up Kamera CSI (IMX477)
+
+Kamera IMX477 di Jetson Orin Nano Super butuh adapter kabel **15-pin ke 22-pin**.
+Error **`-121`** sering berarti masalah kabel (terbalik, tidak terkunci, terlalu panjang).
+
+Urutan diagnosis:
+1. `ls /dev/video*`
+2. `dmesg | grep -i imx477`
+3. `v4l2-ctl --list-devices` lalu `v4l2-ctl --list-formats-ext`
+4. Uji satu *frame* pertama dengan `nvarguscamerasrc` (GStreamer) atau libargus. Jangan berpindah ke MediaPipe jika tahap ini belum lulus.
+
+## 6. Struktur Repo
+
+```
 Hardware-Connections/
 ├── README.md
 ├── schematics/
-│   ├── wiring-diagram.fzz / .svg
-│   ├── pinout-raspberrypi5.md
+│   ├── wiring-diagram.svg
 │   └── power-distribution.md
 ├── enclosure/
-│   ├── cad/                          # sumber CAD editable (Fusion 360)
-│   │   ├── full-assembly.f3d
-│   │   └── *.step                    # ekspor STEP (interchange)
-│   ├── stl/                          # mesh siap-cetak (impor ke Bambu Studio)
-│   │   ├── Top_Frame.stl             # ~ mirror-frame
-│   │   ├── base_enclosure1.stl       # ~ bottom-case (bagian 1)
-│   │   └── base_enclosure2.stl       # ~ bottom-case (bagian 2)
-│   ├── renders/
-│   │   └── exploded-view.png
-│   └── print-settings.md            # material, infill, layer height, alur Bambu Studio
+│   ├── cad/                          # sumber CAD (Fusion 360)
+│   ├── stl/                          # mesh siap-cetak
+│   └── print-settings.md            # parameter cetak Bambu Lab P1S
 ├── camera-module/
-│   ├── imx477-pi5-config.md          # setup rpicam/Picamera2 di Pi 5
-│   ├── imx477-jetson-config.md       # Jetson: nvarguscamerasrc/Argus (pengisian berjalan)
-│   ├── lens-m12-selection.md         # pemilihan lensa M12 (FoV 45/55/65/70/90°)
-│   ├── mirror-attenuation-tests.md  # log uji Persamaan 7 (atenuasi two-way mirror)
-│   └── fov-calculation.md           # acuan Persamaan 9 (jarak kerja & FoV)
+│   ├── lens-m12-selection.md
+│   └── fov-calculation.md
 ├── display/
-│   └── waveshare-10.1-setup.md
 ├── network/
-│   ├── mqtt-tls-config.md
-│   ├── wifi-provisioning.md
-│   └── mqtt-topic-schema.md         # referensi ke kontrak kanonik (lihat catatan)
-├── power/
-│   ├── power-budget-calc.md         # acuan Persamaan 5
-│   └── measured-current-log.csv     # hasil ukur aktual vs estimasi
-├── bom/
-│   └── full-bom.csv
-├── assembly-guide.md
-└── troubleshooting.md
+└── power/
 ```
 
-## Target Perangkat
+## 7. Status & Tugas Tersisa
 
-- Compute (utama): **Raspberry Pi 5** (16 GB) — board edge yang dipakai untuk CE2 (kamera IMX477 native, plug-and-play). Bila desain 3D (Gambar 3 proposal) memakai Compute Module 5, samakan penamaan di `pinout-raspberrypi5.md` dan proposal agar tidak ada inkonsistensi Pi 5 vs CM5.
-- Compute (rencana peningkatan): **Jetson Orin Nano Super** — unit **sudah di tangan**; migrasi (JetPack 6.2.1, L4T 36.4.4, Ubuntu 22.04, CUDA 12.6, **boot dari NVMe SSD**) direncanakan setelah pendampingan teknis tersedia. Lihat bagian Integrasi Jetson Orin Nano Super di bawah.
-- Kamera: **Arducam IMX477 (RGB, 12.3 MP)** dengan dudukan lensa **M12**; tersedia 5 opsi lensa FoV — **45°, 55°, 65°, 70°, 90°** (pilih sesuai jarak kerja cermin; lihat `camera-module/lens-m12-selection.md`).
-- Display: Waveshare 10.1" IPS 1024×600 HDMI.
-- Komunikasi: MQTT over TLS (port 8883).
-
-## Catatan Teknis Kritis
-
-- **Atenuasi mirror + kebutuhan RGB (uji di `camera-module/`)**: two-way mirror menurunkan cahaya yang sampai ke sensor. IMX477 dipilih justru karena **sensor RGB** (bukan NoIR) — rPPG membutuhkan kanal warna utuh dan model umumnya dilatih pada citra RGB, sehingga NoIR akan merusak sinyal & domain input. Konsekuensinya, kompensasi cahaya harus di sisi **pencahayaan/eksposur** (tambah iluminasi, kunci AE/AWB, exposure kelipatan 10 ms untuk anti-flicker 50 Hz), bukan beralih ke NoIR. Dokumentasikan hasil `mirror-attenuation-tests.md` sebagai data kalibrasi, bukan sekadar lampiran.
-- **FoV vs jarak kerja (`fov-calculation.md`)**: karena IMX477 memakai mount M12 dengan lensa yang bisa diganti, FoV kini **variabel desain**, bukan tetap. Angka spec lensa (45/55/65/70/90°) diperlakukan sebagai **FoV diagonal**; setelah dikonversi ke FoV vertikal pada sensor 1/2.3", cakupan tinggi pada jarak kerja **45 cm** kira-kira: 55° ≈ 28 cm, 65° ≈ 34 cm, 70° ≈ 38 cm, 90° ≈ 54 cm. **Rekomendasi: lensa 65° (diagonal) pada jarak kerja ~45 cm** — memuat kepala + margin tinggi antar-pengguna, distorsi moderat (penting untuk geometri landmark ST-GCN), dan tidak menangkap terlalu banyak latar (privasi). Perhitungan & pemilihan lengkap: `camera-module/fov-calculation.md` (kanonik) dan `camera-module/lens-m12-selection.md`. Trade-off: makin lebar FoV → wajah makin sedikit piksel + distorsi makin besar.
-- **Anggaran daya (`power/`)**: bedakan rating PSU (mis. 5V/5A) dari konsumsi aktual. Kolom `measured-current-log.csv` adalah pembuktian; jangan mengklaim konsumsi memakai angka rating catu daya.
-
-## Enclosure & Pencetakan 3D
-
-Desain enclosure dibuat di **Fusion 360** dan dicetak dengan **Bambu Lab P1S** via **Bambu Studio**. Berkas mesh siap-cetak (STL) dari tim — `Top_Frame.stl`, `base_enclosure1.stl`, `base_enclosure2.stl` — diletakkan di `enclosure/stl/`; sumber CAD editable (`.f3d`/`.step`) di `enclosure/cad/`. Alur konversi (ekspor STL → slice di Bambu Studio → 3MF/G-code) dan parameter cetak (material PETG, layer 0,20 mm, infill 20–25% gyroid) didokumentasikan di `enclosure/print-settings.md`. Nama berkas aktual berbeda dari placeholder lama (`mirror-frame`/`bottom-case`); pemetaannya dicatat di `print-settings.md`.
-
-## Kontrak MQTT
-
-`network/mqtt-topic-schema.md` **tidak** mendefinisikan ulang skema — ia mereferensikan kontrak kanonik di `MoodIn-master/docs/ipc-contract.md` dan hanya menambahkan detail transport (broker, TLS, QoS, retensi). Ini mencegah dua sumber kebenaran yang bisa saling menyimpang saat integrasi.
-
-## Integrasi Jetson Orin Nano Super
-
-Status: **rencana peningkatan** — unit **sudah di tangan** (JetPack 6.2.1, boot dari NVMe SSD KIOXIA 256 GB); migrasi dari Raspberry Pi 5 direncanakan setelah pendampingan teknis tersedia. Untuk CE2, **Raspberry Pi 5** tetap board utama; Jetson disiapkan sebagai peningkatan inferensi (ST-GCN + STC-rPPG paralel, target real-time ≥ 30 fps).
-
-Perbedaan integrasi yang perlu disiapkan:
-
-- **Kamera**: port kamera Jetson Orin Nano Super = 2× MIPI CSI-2 **22-pin**, sedangkan board IMX477 = **15-pin** → butuh kabel/adapter **15→22 pin**. IMX477 didukung di **JetPack 6.2.1**: aktifkan overlay lewat `jetson-io.py` (driver native), atau pasang driver Arducam (`install_full.sh -m imx477`) bila mode HQ penuh diperlukan.
-- **Software kamera**: **tidak ada `rpicam`/`libcamera` khas Pi**. Gunakan **`nvarguscamerasrc`** (GStreamer) atau **libargus**; cek mode sensor dengan `v4l2-ctl --list-formats-ext`. Skrip capture Picamera2 dari Pi perlu diporting ke pipeline GStreamer.
-- **Display**: Jetson mengeluarkan **DisplayPort**, panel Waveshare 10.1" masuk lewat HDMI → butuh adapter aktif **DP→HDMI**.
-- **Penyimpanan**: slot **M.2 Key-M** untuk SSD NVMe (OS + dataset & checkpoint). Terpasang: **KIOXIA BG6 256 GB**; OS 6.2.1 di-boot langsung dari NVMe.
-- **Daya**: mode 7–25 W (lebih tinggi dari Pi 5) → tinjau ulang `power/power-budget-calc.md` dan rating PSU.
-- **Runtime DL**: manfaatkan **TensorRT (INT8)**; simpan langkah konversi ONNX→TensorRT di dokumen model terkait.
-
-Rincian langkah-demi-langkah sedang diisi di `camera-module/imx477-jetson-config.md` (unit sudah tersedia).
-
-## Quick Start (perakitan)
-
-Lihat [assembly-guide.md](assembly-guide.md).
+| # | Tugas | Status |
+|---|---|---|
+| 1 | Perakitan fisik figura, kaca, stiker | Pemesanan |
+| 2 | Pembuatan lubang 12 mm di film stiker (opsional/menunggu ACC) | Belum |
+| 3 | Uji nyala IMX477 (CSI) di JetPack 7.2 | Menunggu perangkat |
+| 4 | Pengukuran beban *thermal* puncak | Menunggu (3) |
+| 5 | Laporan `tegrastats` (TensorRT INT8) | Menunggu (4) |
+| 6 | Evaluasi SNR ROI dengan vs tanpa stiker | Sangat kritikal untuk rPPG |

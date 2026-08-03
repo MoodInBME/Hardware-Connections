@@ -1,12 +1,12 @@
 kategori,komponen,spesifikasi,qty,harga_satuan_rp,subtotal_rp,sumber_catatan
-Compute,Raspberry Pi 5,16 GB RAM (board edge utama CE2),1,2200000,2200000,harga estimasi [Medium] - verifikasi distributor lokal
-Compute,Active Cooler Pi 5,heatsink + fan resmi,1,150000,150000,wajib untuk beban inferensi
-Daya,PSU USB-C PD resmi,5.1V/5A 27W,1,300000,300000,hindari PSU underrated (under-voltage)
+Compute,Jetson Orin Nano Super,8 GB RAM (board edge utama CE2),1,2200000,2200000,harga estimasi [Medium] - verifikasi distributor lokal
+Compute,Active Cooler Jetson Orin Nano Super,heatsink + fan resmi,1,150000,150000,wajib untuk beban inferensi
+Daya,PSU USB-C PD resmi,19V/2.7A 43 W,1,300000,300000,hindari PSU underrated (under-voltage)
 Penyimpanan,microSD,128 GB A2 (baseline),1,200000,200000,OS + aplikasi; NVMe opsional di bawah
 Penyimpanan,SSD NVMe + M.2 HAT,256 GB (opsional),1,700000,700000,OPSIONAL - kecepatan IO & dataset lokal
 Kamera,Arducam IMX477,RGB 12.3 MP + mount M12,1,1300000,1300000,sensor RGB (bukan NoIR) - wajib untuk rPPG
-Kamera,Lensa M12,FoV 65 derajat (diagonal),1,150000,150000,rekomendasi; cadangan 70 derajat
-Kamera,Kabel adapter CSI,15-pin ke 22-pin (Pi 5),1,80000,80000,port kamera Pi 5 = 22-pin
+Kamera,Lensa M12,FoV 55 derajat (diagonal),1,150000,150000,rekomendasi; cadangan 70 derajat
+Kamera,Kabel adapter CSI,15-pin ke 22-pin (Jetson Orin Nano Super),1,80000,80000,port kamera Jetson Orin Nano Super = 22-pin
 Display,Waveshare 10.1 inci,IPS 1024x600 HDMI + touch USB,1,1800000,1800000,varian HDMI (bukan DP)
 Display,Kabel micro-HDMI ke HDMI,+ USB untuk touch,1,60000,60000,
 Optik,Two-way mirror akrilik,ukuran sesuai enclosure,1,300000,300000,uji atenuasi (Pers. 7)
@@ -14,6 +14,6 @@ Iluminasi,Strip LED,warm/neutral + driver,1,150000,150000,kompensasi redaman mir
 Enclosure,Filament PETG,~1 kg (cetak P1S),1,400000,400000,PLA untuk prototipe lebih murah
 Wiring,Kabel + konektor + standoff,jumper/HDMI/USB/skrup,1,300000,300000,lot
 Misc,Manajemen kabel & fastener,cable tie/klip/mur-baut,1,200000,200000,lot
-TOTAL,Baseline Raspberry Pi 5,,,,8290000,estimasi total ~ Rp 8.3 jt (kisaran Rp 6.5-8.5 jt tanpa NVMe opsional)
+TOTAL,Baseline Jetson Orin Nano Super,,,,8290000,estimasi total ~ Rp 8.3 jt (kisaran Rp 6.5-8.5 jt tanpa NVMe opsional)
 Upgrade (opsional),Jetson Orin Nano Super Devkit,8 GB 67 TOPS (rencana peningkatan),1,4000000,4000000,DILUAR total baseline - migrasi setelah pendampingan teknis
 Upgrade (opsional),Adapter DP ke HDMI aktif,untuk panel Waveshare,1,150000,150000,khusus jalur Jetson

@@ -37,7 +37,7 @@ Dihitung dari diagonal 7,857 mm (H/2 = 3,1435 mm; V/2 = 2,356 mm):
 | --- | --- | --- | --- |
 | 45 deg | 9,48 | 36,7 deg | 27,9 deg |
 | 55 deg | 7,55 | 45,2 deg | 34,7 deg |
-| 65 deg | 6,17 | 54,0 deg | 41,8 deg |
+| 55 deg | 6,17 | 54,0 deg | 41,8 deg |
 | 70 deg | 5,61 | 58,5 deg | 45,6 deg |
 | 90 deg | 3,93 | 77,3 deg | 61,9 deg |
 
@@ -51,7 +51,7 @@ Kepala penuh (dagu -> ubun-ubun) approx 23 cm. Target margin untuk variasi tingg
 | --- | --- | --- | --- |
 | 45 deg | 19,9 | 26,5 | TIDAK (terpotong) |
 | 55 deg | 25,0 | 33,3 | Pas, margin +/-1 cm |
-| 65 deg | 30,6 | 40,8 | Ya, margin +/-3,8 cm |
+| 55 deg | 30,6 | 40,8 | Ya, margin +/-3,8 cm |
 | 70 deg | 33,6 | 44,8 | Ya, margin +/-5,3 cm |
 | 90 deg | 48,0 | 64,0 | Longgar (wajah kecil) |
 
@@ -61,7 +61,7 @@ Kepala penuh (dagu -> ubun-ubun) approx 23 cm. Target margin untuk variasi tingg
 | --- | --- | --- | --- |
 | 45 deg | 22,4 | 29,8 | Pas-pasan |
 | 55 deg | 28,1 | 37,5 | Ya, margin +/-2,5 cm |
-| 65 deg | 34,4 | 45,9 | Ya, margin +/-5,7 cm |
+| 55 deg | 34,4 | 45,9 | Ya, margin +/-5,7 cm |
 | 70 deg | 37,8 | 50,4 | Ya, margin +/-7,4 cm |
 | 90 deg | 54,0 | 72,0 | Longgar (wajah kecil) |
 
@@ -71,7 +71,7 @@ Kepala penuh (dagu -> ubun-ubun) approx 23 cm. Target margin untuk variasi tingg
 | --- | --- | --- | --- |
 | 45 deg | 24,9 | 33,2 | Ya, margin +/-1 cm |
 | 55 deg | 31,2 | 41,7 | Ya |
-| 65 deg | 38,2 | 51,0 | Ya |
+| 55 deg | 38,2 | 51,0 | Ya |
 | 70 deg | 42,0 | 56,0 | Ya |
 | 90 deg | 60,0 | 80,0 | Longgar |
 
@@ -81,7 +81,7 @@ Cakupan berskala linear terhadap jarak: Cakupan(d) = d x faktor.
 | --- | --- | --- |
 | 45 deg | 0,497 | 0,663 |
 | 55 deg | 0,625 | 0,833 |
-| 65 deg | 0,764 | 1,020 |
+| 55 deg | 0,764 | 1,020 |
 | 70 deg | 0,840 | 1,120 |
 | 90 deg | 1,200 | 1,601 |
 
@@ -98,7 +98,7 @@ Estimasi tinggi wajah dalam piksel (mode 1332 x 990, tinggi bingkai 990 px, jara
 | DFoV | Tinggi bidang (cm) | Porsi wajah | Piksel wajah |
 | --- | --- | --- | --- |
 | 55 deg | 28,1 | 81,8% | ~810 px |
-| 65 deg | 34,4 | 66,9% | ~660 px |
+| 55 deg | 34,4 | 66,9% | ~660 px |
 | 70 deg | 37,8 | 60,8% | ~600 px |
 | 90 deg | 54,0 | 42,6% | ~420 px |
 

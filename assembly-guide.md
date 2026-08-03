@@ -6,7 +6,7 @@
 
 - Cetak enclosure (`enclosure/print-settings.md`): `Top_Frame`, `base_enclosure1`, `base_enclosure2`.
 - Siapkan komponen sesuai `bom/full-bom.csv`.
-- Flash OS Raspberry Pi 5 (Debian Trixie) + provisioning WiFi (`network/wifi-provisioning.md`).
+- Flash OS Jetson Orin Nano Super (Ubuntu 24.04) + provisioning WiFi (`network/wifi-provisioning.md`).
 
 ## 1. Rakit Rangka & Casing
 
@@ -14,16 +14,16 @@
 2. Pasang two-way mirror pada `Top_Frame`. Sisi reflektif menghadap keluar (ke pengguna); sisi transmisi menghadap kamera.
 3. Jangan kunci penuh Top_Frame dulu — elektronik dipasang lebih dahulu.
 
-## 2. Pasang Compute (Raspberry Pi 5)
+## 2. Pasang Compute (Jetson Orin Nano Super)
 
-1. Pasang active cooler pada Pi 5.
-2. Tempatkan Pi 5 pada dudukan casing bawah (standoff), sisakan akses port HDMI/USB/USB-C.
+1. Pasang active cooler pada Jetson Orin Nano Super.
+2. Tempatkan Jetson Orin Nano Super pada dudukan casing bawah (standoff), sisakan akses port HDMI/USB/USB-C.
 3. (Opsional) pasang M.2 HAT + SSD NVMe.
 
 ## 3. Kamera
 
-1. Pasang lensa M12 65° ke board IMX477; setel back-focus nanti.
-2. Sambungkan kamera ke Pi 5 lewat adapter CSI **15->22 pin** (Pi mati). Perhatikan orientasi kontak.
+1. Pasang lensa M12 55° ke board IMX477; setel back-focus nanti.
+2. Sambungkan kamera ke Jetson Orin Nano Super lewat adapter CSI **15->22 pin** (Pi mati). Perhatikan orientasi kontak.
 3. Posisikan kamera di belakang mirror, setinggi ~mata pengguna, tegak lurus bidang (hindari tilt ekstrem). Jarak kerja nominal **~45 cm** ke posisi berdiri.
 4. Aktivasi & uji: `camera-module/imx477-pi5-config.md`.
 
@@ -40,13 +40,13 @@
 
 ## 6. Daya
 
-1. Pi 5 dari PSU PD 27 W resmi.
+1. Jetson Orin Nano Super dari PSU PD 43 W resmi.
 2. Display & LED dari catu terpisah (jangan dari 5V GPIO Pi).
 3. Nyalakan; cek under-voltage: `vcgencmd get_throttled` -> harus `0x0`.
 
 ## 7. Uji Fungsi
 
-1. Kamera: `rpicam-hello --list-cameras` + pratinjau.
+1. Kamera: `nvargus-hello --list-cameras` + pratinjau.
 2. Display + touch berfungsi & orientasi benar.
 3. Uji atenuasi mirror + SNR rPPG (`camera-module/mirror-attenuation-tests.md`).
 4. Konektivitas broker MQTT (`network/mqtt-tls-config.md`).

@@ -8,8 +8,8 @@
 PLN 220V AC
    |
    v
-[Adaptor USB-C PD 27W]  (Raspberry Pi 5)
-   |-- 5,1V/5A --> Raspberry Pi 5 (SoC, RAM, NVMe, kamera CSI)
+[Adaptor USB-C PD 43 W]  (Jetson Orin Nano Super)
+   |-- 19V/2.7A --> Jetson Orin Nano Super (SoC, RAM, NVMe, kamera CSI)
    |               |-- 3,3V (regulator on-board) --> logika GPIO, kamera
    |
 [Catu 5V terpisah / DC 12V]  (beban display & iluminasi)
@@ -17,26 +17,26 @@ PLN 220V AC
    |-- 5V/12V -----> Strip LED iluminasi (via driver + MOSFET)
 ```
 
-**Prinsip kritis:** display dan LED iluminasi **tidak** ditarik dari rail 5V GPIO Pi 5. Pi 5 sendiri sudah mendekati batas anggaran arus USB-C PD; menambah beban lewat GPIO 5V berisiko brownout (under-voltage) yang memicu throttling atau reboot.
+**Prinsip kritis:** display dan LED iluminasi **tidak** ditarik dari rail 5V GPIO Jetson Orin Nano Super. Jetson Orin Nano Super sendiri sudah mendekati batas anggaran arus USB-C PD; menambah beban lewat GPIO 5V berisiko brownout (under-voltage) yang memicu throttling atau reboot.
 
 ## 2. Rail & Beban
 
 | Rail | Sumber | Beban | Catatan proteksi |
 | --- | --- | --- | --- |
-| 5,1V/5A | PSU PD resmi | Pi 5 + kamera + NVMe | pakai PSU resmi; PSU underrated -> under-voltage warning |
+| 19V/2.7A | PSU PD resmi | Jetson Orin Nano Super + kamera + NVMe | pakai PSU resmi; PSU underrated -> under-voltage warning |
 | 5V (panel) | catu display / board panel | Waveshare 10.1" | ikuti spesifikasi board panel |
 | 5V/12V (LED) | catu terpisah | strip LED | sekring/PTC + MOSFET; dimming via PWM GPIO18 |
 
 ## 3. Grounding
 
-- **Common ground** antara Pi 5, driver LED, dan panel bila ada sinyal kontrol lintas-domain (mis. PWM dari GPIO ke MOSFET LED). Tanpa common ground, sinyal PWM tidak punya referensi.
+- **Common ground** antara Jetson Orin Nano Super, driver LED, dan panel bila ada sinyal kontrol lintas-domain (mis. PWM dari GPIO ke MOSFET LED). Tanpa common ground, sinyal PWM tidak punya referensi.
 - Hindari ground loop: satu titik ground utama (star grounding) untuk domain daya berbeda.
 
 ## 4. Proteksi
 
 - Sekring/PTC pada jalur LED (beban paling mungkin korslet saat perakitan).
 - Kapasitor bulk (mis. 1000 uF) dekat strip LED untuk meredam lonjakan saat switching.
-- Kabel USB-C berkualitas & pendek untuk Pi 5 (kabel tipis menyebabkan drop tegangan -> under-voltage).
+- Kabel USB-C berkualitas & pendek untuk Jetson Orin Nano Super (kabel tipis menyebabkan drop tegangan -> under-voltage).
 
 ## 5. Catatan Migrasi Jetson (rencana)
 

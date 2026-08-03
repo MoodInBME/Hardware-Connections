@@ -12,15 +12,15 @@
 | Touch | Kapasitif, USB HID (plug-and-play) |
 | Daya | 5V (via USB / barrel sesuai board) |
 
-> Verifikasi varian panel: bila kode produk mengandung **DP**, input video = DisplayPort (relevan saat migrasi Jetson yang memang keluar DP). Untuk Raspberry Pi 5 (HDMI), gunakan varian HDMI atau adapter yang sesuai.
+> Verifikasi varian panel: bila kode produk mengandung **DP**, input video = DisplayPort (relevan saat migrasi Jetson yang memang keluar DP). Untuk Jetson Orin Nano Super (HDMI), gunakan varian HDMI atau adapter yang sesuai.
 
-## 2. Koneksi ke Raspberry Pi 5
+## 2. Koneksi ke Jetson Orin Nano Super
 
-1. **Video**: kabel micro-HDMI (HDMI0 Pi 5) -> HDMI panel.
-2. **Touch**: kabel USB panel -> port USB 2.0 Pi 5 (sisakan USB 3.0 untuk NVMe/aksesori).
+1. **Video**: kabel micro-HDMI (HDMI0 Jetson Orin Nano Super) -> HDMI panel.
+2. **Touch**: kabel USB panel -> port USB 2.0 Jetson Orin Nano Super (sisakan USB 3.0 untuk NVMe/aksesori).
 3. **Daya**: sesuai board panel (umumnya 5V terpisah; jangan bebani rail GPIO Pi).
 
-## 3. Konfigurasi Resolusi (Raspberry Pi OS / Wayland)
+## 3. Konfigurasi Resolusi (Jetson Orin Nano Super OS / Wayland)
 
 Bila EDID tidak otomatis benar, paksa 1024x600 di `/boot/firmware/config.txt`:
 
@@ -32,7 +32,7 @@ hdmi_cvt=1024 600 60 6 0 0 0
 hdmi_drive=2
 ```
 
-> Pi 5 default memakai stack KMS/Wayland; untuk sesi Wayland gunakan pengaturan tampilan desktop atau `wlr-randr`. Blok `hdmi_*` di atas tetap berguna sebagai fallback firmware.
+> Jetson Orin Nano Super default memakai stack KMS/Wayland; untuk sesi Wayland gunakan pengaturan tampilan desktop atau `wlr-randr`. Blok `hdmi_*` di atas tetap berguna sebagai fallback firmware.
 
 ## 4. Rotasi Layar (jika orientasi potret)
 

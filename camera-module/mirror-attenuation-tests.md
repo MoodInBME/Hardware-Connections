@@ -22,7 +22,7 @@ dengan `I_scene` = intensitas terukur tanpa mirror, `I_sensor` = intensitas teru
 2. Rekam baseline **tanpa mirror** -> ukur rata-rata luminansi ROI (dan per-kanal R/G/B).
 3. Pasang two-way mirror pada dudukan final -> rekam **dengan mirror**, setting optik/eksposur identik.
 4. Hitung `T_eff`, atenuasi (dB), dan loss (EV) dengan Persamaan 7.
-5. Ulangi untuk beberapa tingkat iluminasi & (opsional) beberapa lensa (65°, 70°).
+5. Ulangi untuk beberapa tingkat iluminasi & (opsional) beberapa lensa (55°, 70°).
 6. Uji **SNR rPPG**: rekam wajah 30–60 dtk, ekstraksi sinyal PPG dari ROI dahi/pipi, hitung SNR (rasio daya puncak HR terhadap noise pita sekitar).
 
 ## 3. Metrik yang Dicatat
@@ -37,8 +37,8 @@ dengan `I_scene` = intensitas terukur tanpa mirror, `I_sensor` = intensitas teru
 
 | Tanggal | Lensa | Iluminasi (lux) | Exposure (us) | Gain | Lum. kontrol | Lum. mirror | T_eff | Atenuasi (dB) | Loss (EV) | SNR rPPG (dB) | Catatan |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| | 65° | | 10000 | | | | | | | | |
-| | 65° | | 10000 | | | | | | | | |
+| | 55° | | 10000 | | | | | | | | |
+| | 55° | | 10000 | | | | | | | | |
 | | 70° | | 10000 | | | | | | | | |
 
 ## 5. Kriteria Lolos (usulan)
@@ -67,4 +67,4 @@ print(attenuation(180, 72))  # -> (0.40, 3.98 dB, 1.32 EV)
 - [ ] Ukur baseline tanpa mirror (per kanal).
 - [ ] Ukur melalui mirror final; hitung T_eff & loss.
 - [ ] Tentukan iluminasi tambahan (LED) agar loss terkompensasi tanpa gain ekstrem.
-- [ ] Validasi SNR rPPG untuk lensa 65° (dan 70° sebagai pembanding).
+- [ ] Validasi SNR rPPG untuk lensa 55° (dan 70° sebagai pembanding).

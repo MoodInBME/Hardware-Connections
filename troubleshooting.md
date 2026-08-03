@@ -17,7 +17,7 @@
 
 | Gejala | Sebab | Tindakan |
 | --- | --- | --- |
-| Ikon petir / under-voltage | PSU underrated; kabel USB-C tipis | pakai PSU PD 27 W resmi + kabel pendek berkualitas |
+| Ikon petir / under-voltage | PSU underrated; kabel USB-C tipis | pakai PSU PD 43 W resmi + kabel pendek berkualitas |
 | Reboot acak saat beban puncak | brownout (display/LED membebani rail Pi) | pisahkan catu display & LED (`power-distribution.md`) |
 | Throttling / panas | ventilasi kurang | cek `vcgencmd get_throttled`; tambah aliran udara |
 | LED tidak menyala/redup | catu/MOSFET/ground | cek common ground; ukur tegangan rail LED |
@@ -53,7 +53,7 @@
 
 | Gejala | Tindakan |
 | --- | --- |
-| `nvarguscamerasrc` tidak ada | pastikan JetPack 6.2.1 (bukan 7.2); Argus/ISP penuh di 6.2.1 |
+| `nvarguscamerasrc` tidak ada | pastikan JetPack 7.2 (bukan 7.2); Argus/ISP penuh di 6.2.1 |
 | Kamera hanya V4L2 mentah (RG10) | driver ISP belum aktif; aktifkan overlay `jetson-io` / driver Arducam |
 | Display tak keluar | Jetson = DisplayPort; pakai adapter aktif DP->HDMI |
 | Inferensi lambat | konversi ONNX->TensorRT INT8; `nvpmodel -m 2` + `jetson_clocks` |
