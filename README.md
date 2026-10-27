@@ -1,87 +1,76 @@
 # Hardware-Connections
 
-Perangkat keras MoodIn: pengkabelan, kamera CSI, termal, daya, dan casing. Repo ini tidak memuat model dan tidak memuat kode UI.
-Bagian dari proyek [MoodIn](https://github.com/MoodInBME/MoodIn-master.git).
+Perangkat keras Tugas Akhir **MoodIn**: kamera di balik cermin dua arah, NVIDIA Jetson Orin Nano Super, layar, pencahayaan, casing, dan daya. Sejak fase TA, repo ini juga menampung **integrasi dan _deployment_ sistem di Jetson**, yaitu skrip pemasangan, layanan, dan diagnosis.
 
-![Repo](https://img.shields.io/badge/github-repo-blue?logo=github)
-![Layer](https://img.shields.io/badge/layer-hardware-lightgrey)
+Bagian dari proyek [MoodIn](https://github.com/MoodInBME/MoodIn-master). Model ada di [Software-Architecture](https://github.com/MoodInBME/Software-Architecture), dan antarmuka di [Interface-App](https://github.com/MoodInBME/Interface-App).
 
----
+![layer](https://img.shields.io/badge/layer-hardware-lightgrey)
+![tahap](https://img.shields.io/badge/tahap-preliminary%20research-yellow)
 
-## 1. Bill of material
+> **Status (27 Okt 2026):** dokumen di repo ini masih versi era GEMASTIK, sama dengan tag [`gemastik-xix-2026`](https://github.com/MoodInBME/Hardware-Connections/tree/gemastik-xix-2026). Beberapa komponen akan berubah mengikuti bimbingan TA. Tabel di bawah menandai mana yang tetap dan mana yang menunggu keputusan.
 
-| Komponen | Spesifikasi | Catatan Penting |
-|---|---|---|
-| Compute | **NVIDIA Jetson Orin Nano Super 8GB** (Ubuntu 24.04, JetPack 7.2) | 67 TOPS INT8. Menggantikan Raspberry Pi 5 yang tidak sanggup menjalankan dua model neural simultan pada 30 fps. |
-| Kamera | Arducam **IMX477** RGB 12,3 MP + lensa M12 55° | RGB, bukan NoIR. Cabang fisiologis (rPPG) sangat bergantung pada kanal hijau yang bersih. |
-| Layar | Waveshare 10,1 inci 1024x600 HDMI IPS | Mode *landscape*. Gunakan adapter DP→HDMI aktif untuk Jetson. |
-| Optik | Figura + kaca + film stiker satu arah | Ada masalah transmisi cahaya. Lihat Bagian 4. |
-| Daya | 19 V, tipikal ~43 W, puncak ~52 W | Catu daya disesuaikan dengan spek Jetson. |
-| Pendinginan | Kipas 60 mm, 15-20 CFM | Target suhu *junction* < 80°C. |
+## 1. Komponen prototipe
 
-## 2. Geometri Optik (Field of View)
+| Komponen               | Prototipe saat ini                                             | Status fase TA                                               |
+| ---------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ |
+| Komputer edge          | NVIDIA Jetson Orin Nano Super 8 GB, Ubuntu 24.04, JetPack 7.2  | Tetap                                                        |
+| Kamera                 | Arducam IMX477 (RGB, filter IR-cut tetap) dengan lensa M12 55° | Opsi modul dengan IR-cut bermotor menunggu bimbingan         |
+| Layar                  | Waveshare 10,1" 1024×600                                       | Akan diganti dengan layar yang lebih besar                   |
+| Cermin dan pencahayaan | Cermin dua arah di depan kamera dan layar                      | Susunan dan sumber cahaya menunggu bimbingan                 |
+| Casing                 | Cetak 3D, desain era GEMASTIK                                  | Disesuaikan setelah layar dan kamera final                   |
+| Jaringan               | MQTT di jaringan lokal                                         | Tanpa TLS; _username/password_ broker dan enkripsi isi pesan |
 
-Pada jarak kerja 55 cm dengan lensa M12 55° diagonal:
-```
-tan(27,5°) = 0,5206
-HFoV = 2 * arctan(0,5206 * 0,8) = 45,2°
-VFoV = 2 * arctan(0,5206 * 0,6) = 34,7°
-```
-> **Koreksi Proposal**: HFoV yang benar adalah **45,2°**, bukan 42,2°.
+Angka daya, termal, dan FoV di dokumen era GEMASTIK perlu diukur atau dihitung ulang setelah komponen final.
 
-## 3. Termal
+## 2. Menyalakan kamera CSI (IMX477 di Jetson)
 
-Laju aliran udara minimum:
-```
-CFM = 1,76 * P / dT
-```
-Pada beban puncak (52 W) dengan delta temperatur 8°C, dibutuhkan sekitar 11,4 CFM. Kipas 15-20 CFM memberikan margin yang cukup, **dengan syarat** casing memiliki jalur udara masuk dan keluar (ventilasi memadai).
-
-## 4. Peringatan: Transmisi Stiker Cermin Satu Arah
-
-Desain fisik memakai bingkai figura berlapis film cermin (stiker rubben). Film ini hanya mentransmisikan **10-20% cahaya** dan *tidak rata secara spektral* (atenuasi berbeda untuk R, G, B).
-
-Kehilangan SNR ~5 dB pada wajah (ROI) sangat fatal bagi modul STC-rPPG. Selain itu, distorsi rasio antar-kanal warna tidak bisa dikalibrasi.
-**Mitigasi:** Buat potongan lubang kecil berdiameter **12 mm** pada film stiker, tepat di depan lensa kamera, dan sembunyikan di balik pinggiran bingkai figura.
-
-## 5. Bring-up Kamera CSI (IMX477)
-
-Kamera IMX477 di Jetson Orin Nano Super butuh adapter kabel **15-pin ke 22-pin**.
-Error **`-121`** sering berarti masalah kabel (terbalik, tidak terkunci, terlalu panjang).
+Kamera IMX477 di Jetson Orin Nano Super memakai kabel CSI dengan adapter **15-pin ke 22-pin**. Error **`-121`** biasanya menandakan masalah kabel: terbalik, tidak terkunci, atau terlalu panjang.
 
 Urutan diagnosis:
+
 1. `ls /dev/video*`
 2. `dmesg | grep -i imx477`
-3. `v4l2-ctl --list-devices` lalu `v4l2-ctl --list-formats-ext`
-4. Uji satu *frame* pertama dengan `nvarguscamerasrc` (GStreamer) atau libargus. Jangan berpindah ke MediaPipe jika tahap ini belum lulus.
+3. `v4l2-ctl --list-devices`, lalu `v4l2-ctl --list-formats-ext`
+4. Ambil satu _frame_ dengan `nvarguscamerasrc` (GStreamer) atau libargus. Jangan lanjut ke pemrosesan wajah sebelum tahap ini lulus.
 
-## 6. Struktur Repo
+## 3. Struktur repo
 
-```
+```text
 Hardware-Connections/
-├── README.md
-├── schematics/
-│   ├── wiring-diagram.svg
-│   └── power-distribution.md
-├── enclosure/
-│   ├── cad/                          # sumber CAD (Fusion 360)
-│   ├── stl/                          # mesh siap-cetak
-│   └── print-settings.md            # parameter cetak Bambu Lab P1S
-├── camera-module/
-│   ├── lens-m12-selection.md
-│   └── fov-calculation.md
-├── display/
-├── network/
-└── power/
+├── bom/                  daftar komponen dan harga (era GEMASTIK)
+├── camera-module/        lensa, FoV, konfigurasi IMX477, uji atenuasi cermin
+├── display/              pemasangan layar Waveshare (era GEMASTIK)
+├── enclosure/            CAD (STP), STL, berkas cetak, pengaturan cetak
+├── network/              jaringan dan MQTT
+├── power/                anggaran dan log pengukuran daya
+├── schematics/           distribusi daya
+├── assembly-guide.md     urutan perakitan
+└── troubleshooting.md    diagnosis masalah umum
 ```
 
-## 7. Status & Tugas Tersisa
+Folder `jetson/` untuk skrip integrasi dan _deployment_ ditambahkan setelah skrip diagnosis dipindah dari Software-Architecture.
 
-| # | Tugas | Status |
-|---|---|---|
-| 1 | Perakitan fisik figura, kaca, stiker | Pemesanan |
-| 2 | Pembuatan lubang 12 mm di film stiker (opsional/menunggu ACC) | Belum |
-| 3 | Uji nyala IMX477 (CSI) di JetPack 7.2 | Menunggu perangkat |
-| 4 | Pengukuran beban *thermal* puncak | Menunggu (3) |
-| 5 | Laporan `tegrastats` (TensorRT INT8) | Menunggu (4) |
-| 6 | Evaluasi SNR ROI dengan vs tanpa stiker | Sangat kritikal untuk rPPG |
+## 4. Status dokumen
+
+| Dokumen                                                          | Status                                                                        |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `camera-module/fov-calculation.md`, `lens-m12-selection.md`      | Berlaku untuk lensa M12 55°; hitung ulang bila lensa atau jarak kerja berubah |
+| `camera-module/imx477-jetson-config.md`, `troubleshooting.md`    | Berlaku sebagian; dirapikan di M2                                             |
+| `camera-module/mirror-attenuation-tests.md`                      | Log uji era GEMASTIK; diulang setelah susunan cermin final                    |
+| `display/waveshare-10.1-setup.md`                                | Era GEMASTIK; layar akan diganti                                              |
+| `bom/full-bom.csv`, `power/`, `schematics/`, `assembly-guide.md` | Era GEMASTIK; diperbarui setelah komponen final (M2)                          |
+| `enclosure/`                                                     | Desain era GEMASTIK; direvisi mengikuti layar dan kamera baru                 |
+| `network/mqtt-tls-config.md`                                     | **Arsip.** Fase TA tidak memakai TLS                                          |
+| `network/mqtt-topic-schema.md`                                   | **Arsip.** Mengacu kontrak v1.0.0; kontrak versi TA menyusul di MoodIn-master |
+| `network/wifi-provisioning.md`                                   | Ditinjau di M2                                                                |
+
+## 5. Pekerjaan berikutnya (M2)
+
+- [ ] Keputusan bimbingan: kamera, layar pengganti, susunan cermin, dan pencahayaan.
+- [ ] Uji kamera di Jetson dengan susunan cermin yang baru.
+- [ ] Skrip diagnosis Jetson dipindah dari Software-Architecture ke folder `jetson/` di repo ini.
+- [ ] BOM, daya, dan termal diperbarui setelah komponen final.
+
+## Lisensi
+
+Belum ditetapkan; menunggu keputusan pembimbing. Tanpa berkas `LICENSE`, isi repo ini tidak dilisensikan untuk dipakai ulang.

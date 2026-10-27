@@ -1,0 +1,21 @@
+# Data pribadi dan kredensial (jangan pernah di-commit)
+.env
+*.env
+*.pem
+*.key
+*ktm*
+*KTM*
+*ktp*
+*KTP*
+WhatsApp*
+_pribadi*/
+
+# Berkas sementara CAD dan editor
+*.tmp
+*.bak
+~$*
+
+# Berkas sistem
+.DS_Store
+Thumbs.db
+desktop.ini
