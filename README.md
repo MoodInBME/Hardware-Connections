@@ -1,24 +1,78 @@
-# Hardware-Connections
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/banner-dark.png">
+  <img alt="Hardware-Connections: perangkat keras dan integrasi MoodIn di NVIDIA Jetson, Proposal Tugas Akhir (Pra-TA)." src=".github/readme/banner-light.png" width="100%">
+</picture>
 
-Perangkat keras Tugas Akhir **MoodIn**: kamera di balik cermin dua arah, NVIDIA Jetson Orin Nano Super, layar, pencahayaan, casing, dan daya. Sejak fase TA, repo ini juga menampung **integrasi dan _deployment_ sistem di Jetson**, yaitu skrip pemasangan, layanan, dan diagnosis.
+<p align="center">
+  <a href="#1-komponen-prototipe">Komponen</a> ·
+  <a href="#2-menyalakan-kamera-csi-imx477-di-jetson">Kamera CSI</a> ·
+  <a href="#3-struktur-repo">Struktur</a> ·
+  <a href="#4-status-dokumen">Status dokumen</a> ·
+  <a href="#5-pekerjaan-berikutnya-m2">Berikutnya</a>
+</p>
 
-Bagian dari proyek [MoodIn](https://github.com/MoodInBME/MoodIn-master). Model ada di [Software-Architecture](https://github.com/MoodInBME/Software-Architecture), dan antarmuka di [Interface-App](https://github.com/MoodInBME/Interface-App).
+Repositori ini berisi "tubuh" MoodIn: kamera yang tersembunyi di balik cermin dua arah, komputer _edge_ NVIDIA Jetson Orin Nano Super, layar, pencahayaan, casing, dan daya. Sejak tahap Pra-TA, repositori ini juga menampung **integrasi dan _deployment_ sistem di Jetson**, yaitu skrip pemasangan, layanan, dan diagnosis yang menghubungkan perangkat keras dengan model.
 
-![layer](https://img.shields.io/badge/layer-hardware-lightgrey)
-![tahap](https://img.shields.io/badge/tahap-preliminary%20research-yellow)
+Repositori ini bagian dari proyek [MoodIn](https://github.com/MoodInBME/MoodIn-master), yang saat ini dikembangkan sebagai Proposal Tugas Akhir (Pra-TA). Model ada di [Software-Architecture](https://github.com/MoodInBME/Software-Architecture), dan antarmuka di [Interface-App](https://github.com/MoodInBME/Interface-App).
 
-> **Status (27 Okt 2026):** dokumen di repo ini masih versi era GEMASTIK, sama dengan tag [`gemastik-xix-2026`](https://github.com/MoodInBME/Hardware-Connections/tree/gemastik-xix-2026). Beberapa komponen akan berubah mengikuti bimbingan TA. Tabel di bawah menandai mana yang tetap dan mana yang menunggu keputusan.
+<p>
+  <img alt="NVIDIA Jetson Orin Nano Super" src="https://img.shields.io/badge/NVIDIA%20Jetson-Orin%20Nano%20Super-76B900?style=flat-square&logo=nvidia&logoColor=white">
+  <img alt="Ubuntu 24.04" src="https://img.shields.io/badge/Ubuntu-24.04-E95420?style=flat-square&logo=ubuntu&logoColor=white">
+  <img alt="Tahap Pra-TA" src="https://img.shields.io/badge/tahap-Pra--TA%20%28proposal%29-FF9898?style=flat-square">
+  <img alt="Milestone M2" src="https://img.shields.io/badge/milestone-M2-48C2FF?style=flat-square">
+</p>
+
+> [!NOTE]
+> **Status (28 Okt 2026):** dokumen di repositori ini masih versi era GEMASTIK, sama dengan tag [`gemastik-xix-2026`](https://github.com/MoodInBME/Hardware-Connections/tree/gemastik-xix-2026). Beberapa komponen akan berubah mengikuti bimbingan. Tabel di bawah menandai mana yang tetap dan mana yang menunggu keputusan.
 
 ## 1. Komponen prototipe
 
-| Komponen               | Prototipe saat ini                                             | Status fase TA                                               |
-| ---------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ |
-| Komputer edge          | NVIDIA Jetson Orin Nano Super 8 GB, Ubuntu 24.04, JetPack 7.2  | Tetap                                                        |
-| Kamera                 | Arducam IMX477 (RGB, filter IR-cut tetap) dengan lensa M12 55° | Opsi modul dengan IR-cut bermotor menunggu bimbingan         |
-| Layar                  | Waveshare 10,1" 1024×600                                       | Akan diganti dengan layar yang lebih besar                   |
-| Cermin dan pencahayaan | Cermin dua arah di depan kamera dan layar                      | Susunan dan sumber cahaya menunggu bimbingan                 |
-| Casing                 | Cetak 3D, desain era GEMASTIK                                  | Disesuaikan setelah layar dan kamera final                   |
-| Jaringan               | MQTT di jaringan lokal                                         | Tanpa TLS; _username/password_ broker dan enkripsi isi pesan |
+Prototipe era GEMASTIK sudah memiliki seluruh rantai perangkat keras, dari kamera sampai layar. Pada tahap Pra-TA, sebagian komponen ditinjau ulang supaya kualitas sinyal wajah dan kenyamanan pengguna lebih baik.
+
+<table>
+  <tr>
+    <th width="56"></th>
+    <th align="left">Komponen</th>
+    <th align="left">Prototipe saat ini</th>
+    <th align="left">Status tahap Pra-TA</th>
+  </tr>
+  <tr>
+    <td align="center"><img src=".github/readme/ikon/hw-jetson.png" width="34" alt=""></td>
+    <td><b>Komputer edge</b></td>
+    <td>NVIDIA Jetson Orin Nano Super 8 GB, Ubuntu 24.04, JetPack 7.2</td>
+    <td>Tetap</td>
+  </tr>
+  <tr>
+    <td align="center"><img src=".github/readme/ikon/hw-kamera.png" width="34" alt=""></td>
+    <td><b>Kamera</b></td>
+    <td>Arducam IMX477 (RGB, filter IR-cut tetap) dengan lensa M12 55°</td>
+    <td>Opsi modul dengan IR-cut bermotor menunggu bimbingan</td>
+  </tr>
+  <tr>
+    <td align="center"><img src=".github/readme/ikon/hw-layar.png" width="34" alt=""></td>
+    <td><b>Layar</b></td>
+    <td>Waveshare 10,1" 1024×600</td>
+    <td>Akan diganti dengan layar yang lebih besar</td>
+  </tr>
+  <tr>
+    <td align="center"><img src=".github/readme/ikon/hw-cermin.png" width="34" alt=""></td>
+    <td><b>Cermin dan pencahayaan</b></td>
+    <td>Cermin dua arah di depan kamera dan layar</td>
+    <td>Susunan dan sumber cahaya menunggu bimbingan</td>
+  </tr>
+  <tr>
+    <td align="center"><img src=".github/readme/ikon/hw-casing.png" width="34" alt=""></td>
+    <td><b>Casing</b></td>
+    <td>Cetak 3D, desain era GEMASTIK</td>
+    <td>Disesuaikan setelah layar dan kamera final</td>
+  </tr>
+  <tr>
+    <td align="center"><img src=".github/readme/ikon/hw-jaringan.png" width="34" alt=""></td>
+    <td><b>Jaringan</b></td>
+    <td>MQTT di jaringan lokal</td>
+    <td>Tanpa TLS; <i>username/password</i> broker dan enkripsi isi pesan</td>
+  </tr>
+</table>
 
 Angka daya, termal, dan FoV di dokumen era GEMASTIK perlu diukur atau dihitung ulang setelah komponen final.
 
@@ -60,8 +114,8 @@ Folder `jetson/` untuk skrip integrasi dan _deployment_ ditambahkan setelah skri
 | `display/waveshare-10.1-setup.md`                                | Era GEMASTIK; layar akan diganti                                              |
 | `bom/full-bom.csv`, `power/`, `schematics/`, `assembly-guide.md` | Era GEMASTIK; diperbarui setelah komponen final (M2)                          |
 | `enclosure/`                                                     | Desain era GEMASTIK; direvisi mengikuti layar dan kamera baru                 |
-| `network/mqtt-tls-config.md`                                     | **Arsip.** Fase TA tidak memakai TLS                                          |
-| `network/mqtt-topic-schema.md`                                   | **Arsip.** Mengacu kontrak v1.0.0; kontrak versi TA menyusul di MoodIn-master |
+| `network/mqtt-tls-config.md`                                     | **Arsip.** Tahap Pra-TA tidak memakai TLS                                     |
+| `network/mqtt-topic-schema.md`                                   | **Arsip.** Mengacu kontrak v1.0.0; kontrak pesan v2 menyusul di MoodIn-master |
 | `network/wifi-provisioning.md`                                   | Ditinjau di M2                                                                |
 
 ## 5. Pekerjaan berikutnya (M2)
@@ -73,4 +127,15 @@ Folder `jetson/` untuk skrip integrasi dan _deployment_ ditambahkan setelah skri
 
 ## Lisensi
 
-Belum ditetapkan; menunggu keputusan pembimbing. Tanpa berkas `LICENSE`, isi repo ini tidak dilisensikan untuk dipakai ulang.
+Belum ditetapkan; menunggu keputusan bersama calon dosen pembimbing. Tanpa berkas `LICENSE`, isi repo ini tidak dilisensikan untuk dipakai ulang.
+
+---
+
+<div align="center">
+<sub>
+Departemen Teknik Biomedik · Fakultas Teknologi Elektro dan Informatika Cerdas (FTEIC)<br>
+Institut Teknologi Sepuluh Nopember · Surabaya, Indonesia
+</sub>
+<br><br>
+<sub>Ikon antarmuka: <a href="https://tabler.io/icons">Tabler Icons</a> (MIT), lihat <a href=".github/readme/KREDIT.md">kredit aset</a>.</sub>
+</div>

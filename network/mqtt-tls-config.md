@@ -1,6 +1,6 @@
 # Konfigurasi MQTT over TLS — MoodIn
 
-> **ARSIP (fase TA):** dokumen ini berlaku untuk rancangan era GEMASTIK, yaitu MQTT dengan TLS di port 8883. Fase TA memakai MQTT di jaringan lokal **tanpa TLS**, dengan _username/password_ broker dan enkripsi isi pesan (ADR-10 di [MoodIn-master/docs/adr.md](https://github.com/MoodInBME/MoodIn-master/blob/main/docs/adr.md)). Konfigurasi broker versi TA akan ditulis di dokumen baru.
+> **ARSIP (tahap Pra-TA):** dokumen ini berlaku untuk rancangan era GEMASTIK, yaitu MQTT dengan TLS di port 8883. Tahap Pra-TA memakai MQTT di jaringan lokal **tanpa TLS**, dengan _username/password_ broker dan enkripsi isi pesan (ADR-10 di [MoodIn-master/docs/adr.md](https://github.com/MoodInBME/MoodIn-master/blob/main/docs/adr.md)). Konfigurasi broker yang baru akan ditulis di dokumen baru.
 
 > Transport aman untuk pesan MoodIn di produksi (port **8883**). Skema topik/payload mengacu kontrak kanonik (`MoodIn-master/docs/ipc-contract.md`); di sini fokus keamanan transport.
 

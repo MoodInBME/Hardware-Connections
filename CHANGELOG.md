@@ -4,17 +4,20 @@ Perubahan penting pada repo ini dicatat di sini. Perubahan yang berdampak ke rep
 
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/).
 
-## [Unreleased] — fase Tugas Akhir
+## [Unreleased] — tahap Pra-TA
 
 ### Diubah
 
 - `README.md` ditulis ulang: peran repo pada fase TA (termasuk integrasi dan _deployment_ di Jetson), status tiap komponen, dan status tiap dokumen. Rujukan ke `schematics/wiring-diagram.svg` yang tidak pernah ada dihapus.
 - `network/mqtt-tls-config.md` dan `network/mqtt-topic-schema.md` ditandai arsip.
-  - **[lintas repo]** Fase TA memakai MQTT di jaringan lokal tanpa TLS (ADR-10 di MoodIn-master).
+  - **[lintas repo]** Tahap Pra-TA memakai MQTT di jaringan lokal tanpa TLS (ADR-10 di MoodIn-master).
+- `README.md` ditata ulang (Fase B2): banner terang/gelap, tabel komponen dengan ikon, dan narasi yang lebih deskriptif. Istilah diselaraskan dengan tahap Proposal Tugas Akhir (Pra-TA).
+- Catatan arsip di `network/mqtt-tls-config.md` dan `network/mqtt-topic-schema.md` memakai istilah "tahap Pra-TA" dan "kontrak pesan v2".
 
 ### Ditambahkan
 
 - `CHANGELOG.md` dan `.gitignore`.
+- `.github/readme/`: gambar README (banner, ikon) beserta `KREDIT.md`. **[lintas repo]** Bagian dari Fase B2 di semua repo.
 
 ## [gemastik-xix-2026] — 2026-10-27
 
