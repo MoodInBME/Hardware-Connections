@@ -13,6 +13,8 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/).
   - **[lintas repo]** Tahap Pra-TA memakai MQTT di jaringan lokal tanpa TLS (ADR-10 di MoodIn-master).
 - `README.md` ditata ulang (Fase B2): banner terang/gelap, tabel komponen dengan ikon, dan narasi yang lebih deskriptif. Istilah diselaraskan dengan tahap Proposal Tugas Akhir (Pra-TA).
 - Catatan arsip di `network/mqtt-tls-config.md` dan `network/mqtt-topic-schema.md` memakai istilah "tahap Pra-TA" dan "kontrak pesan v2".
+- `README.md` (Fase C1): _frame_ dan rekaman uji kamera yang memuat wajah tidak di-commit.
+- `.gitignore` (Fase C1): pola folder data partisipan dan rekaman uji. **[lintas repo]** Pola yang sama ditambahkan di semua repo aktif (ADR-14 di MoodIn-master).
 
 ### Ditambahkan
 

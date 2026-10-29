@@ -87,6 +87,8 @@ Urutan diagnosis:
 3. `v4l2-ctl --list-devices`, lalu `v4l2-ctl --list-formats-ext`
 4. Ambil satu _frame_ dengan `nvarguscamerasrc` (GStreamer) atau libargus. Jangan lanjut ke pemrosesan wajah sebelum tahap ini lulus.
 
+_Frame_ dan rekaman uji kamera yang memuat wajah tidak di-commit. Simpan di luar folder repo, atau di folder berawalan `_rekaman` (misalnya `_rekaman/`) yang diabaikan `.gitignore`.
+
 ## 3. Struktur repo
 
 ```text

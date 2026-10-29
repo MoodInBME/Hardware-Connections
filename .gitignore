@@ -19,3 +19,12 @@ _pribadi*/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Data partisipan penelitian dan rekaman uji (ADR-14 di MoodIn-master).
+# Simpan di luar folder repo; pola di bawah hanya pengaman kedua.
+**/data/primer/
+**/data_primer/
+**/data_partisipan/
+_rekaman*/
+*.edf
+*.bdf
