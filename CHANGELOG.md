@@ -18,6 +18,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/).
 
 ### Ditambahkan
 
+- `camera-module/kamera-uvc-c920.md` (usulan): setelan kamera UVC Logitech C920, cara mengunci kontrol kamera, dan uji banding CSI dan UVC yang hanya menyimpan angka. **[lintas repo]** Skrip dan pilihan `camera_backend` ada di Software-Architecture; ADR-15 di MoodIn-master.
 - `CHANGELOG.md` dan `.gitignore`.
 - `.github/readme/`: gambar README (banner, ikon) beserta `KREDIT.md`. **[lintas repo]** Bagian dari Fase B2 di semua repo.
 
