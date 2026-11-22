@@ -117,7 +117,7 @@ Folder `jetson/` untuk skrip integrasi dan _deployment_ ditambahkan setelah skri
 | `bom/full-bom.csv`, `power/`, `schematics/`, `assembly-guide.md` | Era GEMASTIK; diperbarui setelah komponen final (M2)                          |
 | `enclosure/`                                                     | Desain era GEMASTIK; direvisi mengikuti layar dan kamera baru                 |
 | `network/mqtt-tls-config.md`                                     | **Arsip.** Tahap Pra-TA tidak memakai TLS                                     |
-| `network/mqtt-topic-schema.md`                                   | **Arsip.** Mengacu kontrak v1.0.0; kontrak pesan v2 menyusul di MoodIn-master |
+| `network/mqtt-topic-schema.md`                                   | **Arsip.** Mengacu kontrak v1.0.0; kontrak yang berlaku 2.0.0 di MoodIn-master |
 | `network/wifi-provisioning.md`                                   | Ditinjau di M2                                                                |
 
 ## 5. Pekerjaan berikutnya (M2)

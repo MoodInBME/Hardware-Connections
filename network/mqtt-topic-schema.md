@@ -1,6 +1,6 @@
 # Skema Topik MQTT — Referensi Transport (MoodIn)
 
-> **ARSIP (tahap Pra-TA):** dokumen ini mengacu kontrak MQTT v1.0.0 era GEMASTIK, termasuk TLS. Kontrak pesan v2 akan ditulis di MoodIn-master setelah bimbingan.
+> **ARSIP (tahap Pra-TA):** dokumen ini mengacu kontrak MQTT v1.0.0 era GEMASTIK, termasuk TLS. Kontrak yang berlaku adalah versi 2.0.0 di `MoodIn-master/docs/ipc-contract.md` (broker lokal port 1883 tanpa TLS, sesuai ADR-10).
 
 > **PENTING:** berkas ini **tidak** mendefinisikan ulang skema pesan. Sumber kebenaran tunggal untuk nama topik & payload adalah kontrak kanonik di **`MoodIn-master/docs/ipc-contract.md`**. Di sini hanya ditambahkan detail **transport** khas hardware (broker, TLS, QoS, retensi, LWT, identitas perangkat).
 

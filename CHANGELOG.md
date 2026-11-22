@@ -8,6 +8,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/).
 
 ### Diubah
 
+- Catatan arsip `network/mqtt-topic-schema.md` dan tabel dokumen di `README.md` merujuk kontrak 2.0.0. **[lintas repo]** Kontrak 2.0.0 ada di MoodIn-master.
 - `README.md` ditulis ulang: peran repo pada fase TA (termasuk integrasi dan _deployment_ di Jetson), status tiap komponen, dan status tiap dokumen. Rujukan ke `schematics/wiring-diagram.svg` yang tidak pernah ada dihapus.
 - `network/mqtt-tls-config.md` dan `network/mqtt-topic-schema.md` ditandai arsip.
   - **[lintas repo]** Tahap Pra-TA memakai MQTT di jaringan lokal tanpa TLS (ADR-10 di MoodIn-master).
